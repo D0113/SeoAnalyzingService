@@ -9,29 +9,29 @@ using SeoAnalyzing.UnitTest.MockData;
 
 namespace SeoAnalyzing.UnitTest.Core.Client
 {
-    public class GoogleSearchClientTests
+    public class BingSearchClientTests
     {
         private readonly Mock<HttpMessageHandler> _httpMessageHandlerMock;
         private readonly HttpClient _httpClient;
-        private readonly Mock<ILogger<GoogleSearchClient>> _loggerMock;
-        private readonly IGoogleSearchClient _googleSearchClient;
-        private const string SearchUrl = "//www.example.com";
+        private readonly Mock<ILogger<BingSearchClient>> _loggerMock;
+        private readonly IBingSearchClient _bingSearchClient;
+        private const string SearchUrl = "www.example.com";
 
-        public GoogleSearchClientTests()
+        public BingSearchClientTests()
         {
-            _loggerMock = new Mock<ILogger<GoogleSearchClient>>();
+            _loggerMock = new Mock<ILogger<BingSearchClient>>();
             _httpMessageHandlerMock = new Mock<HttpMessageHandler>(); 
             _httpClient = new HttpClient(_httpMessageHandlerMock.Object)
             {
-                BaseAddress = new Uri(CommonConstants.GoogleUrl)
+                BaseAddress = new Uri(CommonConstants.BingUrl)
             };
 
             var httpClientFactoryMock = new Mock<IHttpClientFactory>();
             httpClientFactoryMock
-                .Setup(x => x.CreateClient(CommonConstants.GoogleClient))
+                .Setup(x => x.CreateClient(CommonConstants.BingClient))
                 .Returns(_httpClient);
 
-            _googleSearchClient = new GoogleSearchClient(httpClientFactoryMock.Object, _loggerMock.Object);
+            _bingSearchClient = new BingSearchClient(httpClientFactoryMock.Object, _loggerMock.Object);
         }
 
         [Fact]
@@ -40,8 +40,8 @@ namespace SeoAnalyzing.UnitTest.Core.Client
             // Arrange
             var searchModel = SearchRequestModelMocks.GenerateSearchRequestModel(SearchUrl);
 
-            var htmlString = $"<html><body><div data-id=\"atritem-https:{SearchUrl}\"></div><div data-id=\"atritem-https:{SearchUrl}\"></div><div data-id=\"atritem-https:{SearchUrl}\"></div></body></html>";
-            var expectedPositions = new List<int> { 1, 2, 3 };
+            var htmlString = $"<html><body><div class=\"tpmeta\"><cite>{SearchUrl}</cite></div><div class=\"tpmeta\"><cite>{SearchUrl}</cite></div></body></html>";
+            var expectedPositions = new List<int> { 1, 2 };
 
             _httpMessageHandlerMock.Protected()
                 .Setup<Task<HttpResponseMessage>>(
@@ -55,7 +55,7 @@ namespace SeoAnalyzing.UnitTest.Core.Client
                 });
 
             // Act
-            var result = await _googleSearchClient.SearchAsync(searchModel);
+            var result = await _bingSearchClient.SearchAsync(searchModel);
 
             // Assert
             Assert.NotNull(result);
@@ -77,7 +77,7 @@ namespace SeoAnalyzing.UnitTest.Core.Client
                 .ThrowsAsync(new HttpRequestException(errorMessage));
 
             // Act & Assert
-            var exceptionResult = await Assert.ThrowsAsync<HttpRequestException>(() => _googleSearchClient.SearchAsync(searchModel));
+            var exceptionResult = await Assert.ThrowsAsync<HttpRequestException>(() => _bingSearchClient.SearchAsync(searchModel));
             Assert.Equal(exceptionResult.Message, errorMessage);
         }
 
@@ -95,7 +95,7 @@ namespace SeoAnalyzing.UnitTest.Core.Client
                 .ThrowsAsync(new TaskCanceledException(errorMessage));
 
             // Act & Assert
-            var exceptionResult = await Assert.ThrowsAsync<TaskCanceledException>(() => _googleSearchClient.SearchAsync(searchModel));
+            var exceptionResult = await Assert.ThrowsAsync<TaskCanceledException>(() => _bingSearchClient.SearchAsync(searchModel));
             Assert.Equal(exceptionResult.Message, errorMessage);
         }
 
@@ -113,7 +113,7 @@ namespace SeoAnalyzing.UnitTest.Core.Client
                 .ThrowsAsync(new Exception(errorMessage));
 
             // Act & Assert
-            var exceptionResult = await Assert.ThrowsAsync<Exception>(() => _googleSearchClient.SearchAsync(searchModel));
+            var exceptionResult = await Assert.ThrowsAsync<Exception>(() => _bingSearchClient.SearchAsync(searchModel));
             Assert.Equal(exceptionResult.Message, errorMessage);
         }
     }
