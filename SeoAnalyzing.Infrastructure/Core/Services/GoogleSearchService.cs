@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SeoAnalyzing.Common.Enums;
 using SeoAnalyzing.Infrastructure.Interfaces.Clients;
 using SeoAnalyzing.Infrastructure.Interfaces.Services;
@@ -12,13 +11,13 @@ namespace SeoAnalyzing.Infrastructure.Core.Services
     public class GoogleSearchService : IGoogleSearchService
     {
         private readonly IGoogleSearchClient _googleSearchClient;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IMemoryCacheService _memoryCacheService;
         private readonly ILogger<GoogleSearchService> _logger;
 
-        public GoogleSearchService(IGoogleSearchClient googleSearchClient, IMemoryCache memoryCache, ILogger<GoogleSearchService> logger)
+        public GoogleSearchService(IGoogleSearchClient googleSearchClient, IMemoryCacheService memoryCacheService, ILogger<GoogleSearchService> logger)
         {
             _googleSearchClient = googleSearchClient;
-            _memoryCache = memoryCache;
+            _memoryCacheService = memoryCacheService;
             _logger = logger;
         }
 
@@ -29,7 +28,7 @@ namespace SeoAnalyzing.Infrastructure.Core.Services
 
             _logger.LogInformation("[GoogleSearchService] - Try to get cache value");
 
-            if (!_memoryCache.TryGetValue(cacheKey, out SearchResponseModel? cachedValue))
+            if (!_memoryCacheService.TryGetValue(cacheKey, out SearchResponseModel? cachedValue))
             {
                 _logger.LogInformation("[GoogleSearchService] - Start {mode} search - query: {query} - Url: {url}, Limit: {limit}",
                     searchEngine, searchModel.SearchQuery, searchModel.SearchUrl, searchModel.SearchLimit);
@@ -44,7 +43,7 @@ namespace SeoAnalyzing.Infrastructure.Core.Services
                 };
 
                 _logger.LogInformation("[GoogleSearchService] - Start cache search result.");
-                _memoryCache.Set(cacheKey, cachedValue, TimeSpan.FromHours(1));
+                _memoryCacheService.Set(cacheKey, cachedValue, TimeSpan.FromHours(1));
 
                 return cachedValue;
             }

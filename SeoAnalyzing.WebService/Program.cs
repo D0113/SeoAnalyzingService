@@ -35,6 +35,7 @@ builder.Services.AddScoped<IGoogleSearchClient, GoogleSearchClient>();
 builder.Services.AddScoped<IGoogleSearchService, GoogleSearchService>();
 builder.Services.AddScoped<IBingSearchClient, BingSearchClient>();
 builder.Services.AddScoped<IBingSearchService, BingSearchService>();
+builder.Services.AddScoped<IMemoryCacheService, MemoryCacheService>();
 
 var app = builder.Build();
 
