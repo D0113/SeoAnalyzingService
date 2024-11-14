@@ -43,7 +43,7 @@ namespace SeoAnalyzing.UnitTest.Core.Services
 
             // Assert
             Assert.Equal(result.SearchEngine, expectedResponse.SearchEngine);
-            Assert.Equal(result.Position, expectedResponse.Position);
+            Assert.Equal(result.Positions, expectedResponse.Positions);
             Assert.Equal(result.TotalCount, expectedResponse.TotalCount);
         }
 
@@ -63,7 +63,7 @@ namespace SeoAnalyzing.UnitTest.Core.Services
 
             // Assert
             Assert.Equal(result.SearchEngine, expectedResponse.SearchEngine);
-            Assert.Equal(result.Position, expectedResponse.Position);
+            Assert.Equal(result.Positions, expectedResponse.Positions);
             Assert.Equal(result.TotalCount, expectedResponse.TotalCount);
         }
 
@@ -91,7 +91,7 @@ namespace SeoAnalyzing.UnitTest.Core.Services
 
             // Assert
             Assert.Equal(result.SearchEngine, expectedResponse.SearchEngine);
-            Assert.Equal(result.Position, expectedResponse.Position);
+            Assert.Equal(result.Positions, expectedResponse.Positions);
             Assert.Equal(result.TotalCount, expectedResponse.TotalCount);
         }
     }

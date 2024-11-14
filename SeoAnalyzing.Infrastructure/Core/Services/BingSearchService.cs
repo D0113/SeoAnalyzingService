@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SeoAnalyzing.Common.Enums;
 using SeoAnalyzing.Infrastructure.Interfaces.Clients;
 using SeoAnalyzing.Infrastructure.Interfaces.Services;
@@ -39,7 +38,7 @@ namespace SeoAnalyzing.Infrastructure.Core.Services
                 cachedValue = new SearchResponseModel
                 {
                     TotalCount = searchResult.TotalCount,
-                    Position = searchResult.Positions,
+                    Positions = searchResult.Positions,
                     SearchEngine = searchEngine,
                 };
 
@@ -53,7 +52,7 @@ namespace SeoAnalyzing.Infrastructure.Core.Services
             {
                 TotalCount = 0,
                 SearchEngine = searchEngine,
-                Position = "0",
+                Positions = "0",
             };
         }
     }

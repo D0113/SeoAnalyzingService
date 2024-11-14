@@ -9,7 +9,7 @@ namespace SeoAnalyzing.UnitTest.MockData
             return new SearchResponseModel
             {
                 TotalCount = total,
-                Position = position,
+                Positions = position,
                 SearchEngine = searchEngine
             };
         }
@@ -19,7 +19,7 @@ namespace SeoAnalyzing.UnitTest.MockData
             return new SearchResponseModel
             {
                 TotalCount = 0,
-                Position = "0",
+                Positions = "0",
                 SearchEngine = searchEngine
             };
         }
