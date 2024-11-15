@@ -14,7 +14,7 @@ namespace SeoAnalyzing.WebService.Controllers
             _bingSearchService = bingSearchService;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("Search")]
         public async Task<IActionResult> SearchAsync([FromQuery] SearchRequestModel request)
         {
