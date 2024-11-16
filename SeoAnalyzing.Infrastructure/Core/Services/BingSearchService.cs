@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using SeoAnalyzing.Common.Enums;
 using SeoAnalyzing.Infrastructure.Interfaces.Clients;
 using SeoAnalyzing.Infrastructure.Interfaces.Services;
@@ -12,13 +11,13 @@ namespace SeoAnalyzing.Infrastructure.Core.Services
     public class BingSearchService : IBingSearchService
     {
         private readonly IBingSearchClient _bingSearchClient ;
-        private readonly IMemoryCache _memoryCache;
+        private readonly IMemoryCacheService _memoryCacheService;
         private readonly ILogger<BingSearchService> _logger;
 
-        public BingSearchService(IBingSearchClient bingSearchClient, IMemoryCache memoryCache, ILogger<BingSearchService> logger)
+        public BingSearchService(IBingSearchClient bingSearchClient, IMemoryCacheService memoryCacheService, ILogger<BingSearchService> logger)
         {
             _bingSearchClient = bingSearchClient;
-            _memoryCache = memoryCache;
+            _memoryCacheService = memoryCacheService;
             _logger = logger;
         }
 
@@ -29,7 +28,7 @@ namespace SeoAnalyzing.Infrastructure.Core.Services
 
             _logger.LogInformation("[BingSearchService] - Try to get cache value");
 
-            if (!_memoryCache.TryGetValue(cacheKey, out SearchResponseModel? cachedValue))
+            if (!_memoryCacheService.TryGetValue(cacheKey, out SearchResponseModel? cachedValue))
             {
                 _logger.LogInformation("[BingSearchService] - Start {mode} search - query: {query} - Url: {url}, Limit: {limit}",
                     searchEngine, searchModel.SearchQuery, searchModel.SearchUrl, searchModel.SearchLimit);
@@ -39,12 +38,12 @@ namespace SeoAnalyzing.Infrastructure.Core.Services
                 cachedValue = new SearchResponseModel
                 {
                     TotalCount = searchResult.TotalCount,
-                    Position = searchResult.Positions,
+                    Positions = searchResult.Positions,
                     SearchEngine = searchEngine,
                 };
 
                 _logger.LogInformation("[BingSearchService] - Start cache search result.");
-                _memoryCache.Set(cacheKey, cachedValue, TimeSpan.FromHours(1));
+                _memoryCacheService.Set(cacheKey, cachedValue, TimeSpan.FromHours(1));
 
                 return cachedValue;
             }
@@ -53,7 +52,7 @@ namespace SeoAnalyzing.Infrastructure.Core.Services
             {
                 TotalCount = 0,
                 SearchEngine = searchEngine,
-                Position = "0",
+                Positions = "0",
             };
         }
     }

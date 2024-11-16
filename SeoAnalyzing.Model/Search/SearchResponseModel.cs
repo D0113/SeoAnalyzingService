@@ -4,7 +4,7 @@
     {
         public int TotalCount { get; set; }
 
-        public string Position { get; set; }
+        public string Positions { get; set; }
 
         public string SearchEngine { get; set; }
     }
