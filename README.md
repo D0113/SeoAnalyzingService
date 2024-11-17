@@ -55,8 +55,6 @@ This service returns a string that contains number of times and positions where 
 
 ## API Endpoints
 
-Here are some example endpoints:
-
 - **Analyze Bing SEO**:
     ```http
     GET /api/v1/BingAnalyzing/Search?searchQuery={searchQuery}&searchUrl={searchUrl}&searchLimit={searchLimit}
